@@ -1,0 +1,70 @@
+version: "3"
+services:
+
+  # Discovery service
+  spring-microservices_discovery:
+    image: samreachyan/spring-microservices_discovery:1.0.0
+    container_name: spring-microservices_discovery
+    restart: always
+    ports:
+      - 8761:8761
+
+  # API Gateway
+  spring-microservices_gateway:
+    image: samreachyan/spring-microservices_gateway:1.0.0
+    container_name: spring-microservices_gateway
+    restart: always
+    environment:
+      - DISCOVERY_URL=http://discovery:8761
+    ports:
+      - 8765:8765
+    depends_on:
+      - spring-microservices_discovery
+  
+  # Article service
+  spring-microservies_articles:
+    image: samreachyan/spring-microservices_articles:1.0.0
+    container_name: spring-microservies_articles
+    restart: always
+    environment:
+      - DISCOVERY_URL=http://discovery:8761
+    ports:
+      - 8080:8080
+    depends_on:
+      - spring-microservices_discovery
+
+  # Article service
+  spring-microservies_articles_two:
+    image: samreachyan/spring-microservices_articles:1.0.0
+    container_name: spring-microservies_articles_two
+    restart: always
+    environment:
+      - DISCOVERY_URL=http://discovery:8761
+    ports:
+      - 9080:8080
+    depends_on:
+      - spring-microservices_discovery
+
+  # Author service
+  spring-microservies_authors:
+    image: samreachyan/spring-microservices_authors:1.0.0
+    container_name: spring-microservies_authors
+    restart: always
+    environment:
+      - DISCOVERY_URL=http://discovery:8761
+    ports:
+      - 8081:8081
+    depends_on:
+      - spring-microservices_discovery
+
+  # Author service
+  spring-microservies_authors_two:
+    image: samreachyan/spring-microservices_authors:1.0.0
+    container_name: spring-microservies_authors_two
+    restart: always
+    environment:
+      - DISCOVERY_URL=http://discovery:8761
+    ports:
+      - 9081:8081
+    depends_on:
+      - spring-microservices_discovery
